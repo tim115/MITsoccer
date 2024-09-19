@@ -1,0 +1,46 @@
+import numpy as np
+import parseData #snippet $396
+import get_player_distance_covered as dist #modified snippet $409
+import playerInfos #sippet $408
+import get_time_played as tp #modified snippet $475
+import convert_speed as cs
+import matplotlib.pyplot as plt
+
+match = parseData.Match("dataAvN.xml") 
+aut = playerInfos.parseSite(8)
+mkd = playerInfos.parseSite(59205)
+
+#get the starting time
+num_frames = len(match.frames)
+startframe = 0
+for f in range(0,num_frames):
+        if((match.frames[f].ballInPlay) == 1):
+                startframe = f
+                break
+
+# create & output data
+fig, austria = plt.subplots(4,4)
+i = 0
+j = 0
+for p in aut:
+        z = tp.get_time_played(match,p.id,startframe)
+        if (z>0):
+            if (i==4):
+                i = 0
+                j = j+1
+            austria[j,i] = cs.plot_sprints(match,p.id,p.name + ", Austria",startframe)
+            i = i+1
+plt.show()
+
+fig, north_macedonia = plt.subplots(4,4)
+i = 0
+j = 0
+for p in mkd:
+        z = tp.get_time_played(match,p.id,startframe)
+        if (z>0):
+            if (i==4):
+                i = 0
+                j = j+1
+            north_macedonia[j,i] = cs.plot_sprints(match,p.id,p.name + ", North Macedonia",startframe)
+            i = i+1
+plt.show()
